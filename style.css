@@ -1,0 +1,22 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+:root {
+	--page-gap: 1rem;
+	font-family: sans-serif;
+}
+
+body {
+	max-width: 40rem;
+	margin: 0 auto;
+	padding: var(--page-gap);
+}
+
+dl {
+	display: grid;
+	grid-template-columns: auto 1fr;
+	gap: 0.2em 0.5em;
+}

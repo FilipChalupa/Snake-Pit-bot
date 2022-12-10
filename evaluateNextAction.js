@@ -22,21 +22,29 @@ export const evaluateNextAction = (width, height, player, allPlayers, food) => {
 
 	const headPosition = player.fromHeadPosition[0]
 	const neckPosition = player.fromHeadPosition[1]
-	const direction = {
+	const forwardDirection = {
 		x: headPosition.x - neckPosition.x,
 		y: headPosition.y - neckPosition.y,
 	}
+	const leftDirection = {
+		x: forwardDirection.y,
+		y: -forwardDirection.x,
+	}
+	const rightDirection = {
+		x: -forwardDirection.y,
+		y: forwardDirection.x,
+	}
 	const isForwardFree = !isObstacle(
-		headPosition.x + direction.x,
-		headPosition.y + direction.y,
+		headPosition.x + forwardDirection.x,
+		headPosition.y + forwardDirection.y,
 	)
 	const isLeftFree = !isObstacle(
-		headPosition.x + direction.y,
-		headPosition.y - direction.x,
+		headPosition.x + leftDirection.y,
+		headPosition.y + leftDirection.x,
 	)
 	const isRightFree = !isObstacle(
-		headPosition.x - direction.y,
-		headPosition.y + direction.x,
+		headPosition.x + rightDirection.y,
+		headPosition.y + rightDirection.x,
 	)
 	const options = []
 	if (isForwardFree) {

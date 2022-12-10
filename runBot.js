@@ -1,4 +1,4 @@
-import { evaluateNextMove } from './evaluateNextMove.js'
+import { evaluateNextAction } from './evaluateNextAction.js'
 import { snakePitServerUrl } from './snakePitServerUrl.js'
 
 export const runBot = async (roomId, playerToken, onEnd) => {
@@ -25,10 +25,10 @@ export const runBot = async (roomId, playerToken, onEnd) => {
 			onEnd()
 			return
 		}
-		const nextAction = evaluateNextMove(width, height, player, players, food)
+		const nextAction = evaluateNextAction(width, height, player, players, food)
 
 		// @TODO: remove delay
-		await new Promise((resolve) => setTimeout(resolve, 300))
+		await new Promise((resolve) => setTimeout(resolve, 50))
 		await loop(nextAction)
 	}
 	await loop('forward')

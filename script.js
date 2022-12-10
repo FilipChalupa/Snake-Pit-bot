@@ -44,6 +44,7 @@ if (playerToken !== null && (await isPlayerTokenValid())) {
 }
 nameForm.addEventListener('submit', async (event) => {
 	event.preventDefault()
+	nameForm.setAttribute('hidden', '')
 	playerName = nameInput.value
 	localStorage.setItem(localStorageNameKey, playerName)
 

@@ -18,7 +18,7 @@ export const evaluateNextAction = (width, height, player, allPlayers, food) => {
 		return (x, y) => obstacles[x]?.[y] ?? false
 	})()
 
-	let action = 'forward'
+	let actionName = 'forward'
 
 	const headPosition = player.fromHeadPosition[0]
 	const neckPosition = player.fromHeadPosition[1]
@@ -26,42 +26,33 @@ export const evaluateNextAction = (width, height, player, allPlayers, food) => {
 		x: headPosition.x - neckPosition.x,
 		y: headPosition.y - neckPosition.y,
 	}
-	const leftDirection = {
-		x: forwardDirection.y,
-		y: -forwardDirection.x,
-	}
-	const rightDirection = {
-		x: -forwardDirection.y,
-		y: forwardDirection.x,
-	}
-	const isForwardFree = !isObstacle(
-		headPosition.x + forwardDirection.x,
-		headPosition.y + forwardDirection.y,
+	const directions = [
+		{
+			actionName: 'forward',
+			direction: forwardDirection,
+		},
+		{
+			actionName: 'left',
+			direction: {
+				x: forwardDirection.y,
+				y: -forwardDirection.x,
+			},
+		},
+		{
+			actionName: 'right',
+			direction: {
+				x: -forwardDirection.y,
+				y: forwardDirection.x,
+			},
+		},
+	]
+	const options = directions.filter(
+		({ direction }) =>
+			!isObstacle(headPosition.x + direction.x, headPosition.y + direction.y),
 	)
-	const isLeftFree = !isObstacle(
-		headPosition.x + leftDirection.y,
-		headPosition.y + leftDirection.x,
-	)
-	const isRightFree = !isObstacle(
-		headPosition.x + rightDirection.y,
-		headPosition.y + rightDirection.x,
-	)
-	const options = []
-	if (isForwardFree) {
-		// Increase forward probability
-		for (let i = 0; i < 8; i++) {
-			options.push('forward')
-		}
-	}
-	if (isLeftFree) {
-		options.push('left')
-	}
-	if (isRightFree) {
-		options.push('right')
-	}
 	if (options.length > 0) {
-		action = options[Math.floor(Math.random() * options.length)]
+		actionName = options[Math.floor(Math.random() * options.length)].actionName
 	}
 
-	return action
+	return actionName
 }

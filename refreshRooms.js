@@ -1,4 +1,4 @@
-import { runBot } from './runBot.js'
+import { getJoinedRoomIds, joinRoom } from './joinRoom.js'
 import { snakePitServerUrl } from './snakePitServerUrl.js'
 
 const escape = (htmlString) =>
@@ -22,6 +22,7 @@ const update = async (playerId, playerToken) => {
 		const isAlreadyJoined = room.joinedPlayers.some(
 			(otherPlayer) => otherPlayer.id === playerId,
 		)
+		const joinedRoomIds = getJoinedRoomIds()
 		const isUnderControl = joinedRoomIds.includes(room.id)
 		const isNotWaiting = room.status !== 'waiting'
 		roomElement.innerHTML = /* html */ `
@@ -102,13 +103,3 @@ export const refreshRooms = (() => {
 		}, 2000)
 	}
 })()
-
-let joinedRoomIds = []
-
-const joinRoom = async (roomId, playerToken) => {
-	joinedRoomIds.push(roomId)
-
-	await runBot(roomId, playerToken, () => {
-		joinedRoomIds = joinedRoomIds.filter((id) => id !== roomId)
-	})
-}

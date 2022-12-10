@@ -29,7 +29,9 @@ export const runBot = async (roomId, playerToken, onEnd) => {
 
 		// @TODO: remove delay
 		await new Promise((resolve) => setTimeout(resolve, 1))
-		await loop(nextAction)
+		setTimeout(() => {
+			loop(nextAction)
+		}, 1)
 	}
 	await loop('forward')
 }

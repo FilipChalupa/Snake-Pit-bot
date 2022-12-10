@@ -1,5 +1,4 @@
-import { refreshRooms } from './refreshRooms.js'
-import { showCreateForm } from './showCreateForm.js'
+import { showRooms } from './showRooms.js'
 import { snakePitServerUrl } from './snakePitServerUrl.js'
 
 const isPlayerTokenValid = async () => {
@@ -21,11 +20,6 @@ const isPlayerTokenValid = async () => {
 	return isValid
 }
 
-const showRooms = () => {
-	showCreateForm(playerToken)
-	refreshRooms(playerToken)
-}
-
 const localStorageTokenKey = 'playerToken'
 let playerToken = localStorage.getItem(localStorageTokenKey)
 
@@ -38,7 +32,7 @@ if (playerName !== null) {
 	nameInput.value = playerName
 }
 if (playerToken !== null && (await isPlayerTokenValid())) {
-	showRooms()
+	showRooms(playerToken)
 } else {
 	nameForm.removeAttribute('hidden')
 }
@@ -63,5 +57,5 @@ nameForm.addEventListener('submit', async (event) => {
 	const data = await createPlayerResponse.json()
 	playerToken = data.playerToken
 	localStorage.setItem(localStorageTokenKey, playerToken)
-	showRooms()
+	showRooms(playerToken)
 })

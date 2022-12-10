@@ -26,3 +26,7 @@ form:not([hidden]) {
 	row-gap: 0.3em;
 	justify-content: start;
 }
+
+form > *:empty {
+	display: none;
+}

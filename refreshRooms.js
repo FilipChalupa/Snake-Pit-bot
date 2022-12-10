@@ -1,3 +1,4 @@
+import { runBot } from './runBot.js'
 import { snakePitServerUrl } from './snakePitServerUrl.js'
 
 const escape = (htmlString) =>
@@ -12,7 +13,8 @@ const roomsList = document.querySelector('#rooms')
 
 const update = async (playerId, playerToken) => {
 	const listRoomsResponse = await fetch(`${snakePitServerUrl}/list-rooms`)
-	const { rooms } = await listRoomsResponse.json()
+	const data = await listRoomsResponse.json()
+	const rooms = data.rooms.sort((a, b) => a.id.localeCompare(b.id))
 
 	roomsList.innerHTML = ''
 	rooms.forEach((room) => {
@@ -20,6 +22,7 @@ const update = async (playerId, playerToken) => {
 		const isAlreadyJoined = room.joinedPlayers.some(
 			(otherPlayer) => otherPlayer.id === playerId,
 		)
+		const isUnderControl = joinedRoomIds.includes(room.id)
 		const isNotWaiting = room.status !== 'waiting'
 		roomElement.innerHTML = /* html */ `
 			<li>
@@ -45,14 +48,18 @@ const update = async (playerId, playerToken) => {
 			</li>
 		`
 		const joinButton = roomElement.querySelector('button')
-		if (isNotWaiting || isAlreadyJoined) {
+		if (isNotWaiting || isAlreadyJoined || isUnderControl) {
 			joinButton.setAttribute('disabled', '')
-		}
-		if (isNotWaiting) {
-			joinButton.textContent = 'Not waiting for new players'
-		}
-		if (isAlreadyJoined) {
-			joinButton.textContent = 'Already joined'
+
+			if (isUnderControl) {
+				joinButton.textContent = 'Under control'
+			} else if (room.status === 'ended') {
+				joinButton.textContent = 'Ended'
+			} else if (isAlreadyJoined) {
+				joinButton.textContent = 'Already joined before'
+			} else if (room.status === 'playing') {
+				joinButton.textContent = 'In progress'
+			}
 		}
 		joinButton.addEventListener('click', async () => {
 			joinButton.setAttribute('disabled', '')
@@ -90,10 +97,18 @@ export const refreshRooms = (() => {
 
 		await update(playerId, playerToken)
 
-		timer = setTimeout(refreshRooms, 2000)
+		timer = setTimeout(() => {
+			refreshRooms(playerToken)
+		}, 2000)
 	}
 })()
 
+let joinedRoomIds = []
+
 const joinRoom = async (roomId, playerToken) => {
-	console.log({ roomId, playerToken })
+	joinedRoomIds.push(roomId)
+
+	await runBot(roomId, playerToken, () => {
+		joinedRoomIds = joinedRoomIds.filter((id) => id !== roomId)
+	})
 }

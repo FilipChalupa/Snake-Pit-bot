@@ -12,9 +12,47 @@
 		<h1>Snake Pit bot</h1>
 		<h2 id="botName"></h2>
 		<form id="nameForm" hidden>
-			<label>Name the bot: <input type="text" value="Ofecka" /></label>
-			<button type="submit">Submit</button>
+			<h3>Name the bot</h3>
+			<label>Name: <input type="text" value="Ofecka" /></label>
+			<div>
+				<button type="submit">Submit</button>
+			</div>
 		</form>
+		<form id="createRoomForm" hidden>
+			<h3>Create room</h3>
+			<div>
+				<label>
+					Width:
+					<input type="number" name="width" min="1" value="10">
+				</label>
+			</div>
+			<div>
+				<label>
+					Height:
+					<input type="number" name="height" min="1" value="10">
+				</label>
+			</div>
+			<div>
+				<label>
+					Maximum players:
+					<input type="number"name="maximumPlayers" min="1" value="1">
+				</label>
+			</div>
+			<div>
+				<label>
+					Maximum food:
+					<input type="number"name="maximumFood" min="1" value="1">
+				</label>
+			</div>
+			<div>
+				<label>
+					Join immediately:
+					<input name="join" type="checkbox">
+				</label>
+			</div>
+			<div>
+				<button type="submit">Create room</button>
+			</div>
 		<ul id="rooms"></ul>
 	</body>
 </html>

@@ -46,12 +46,51 @@ export const evaluateNextAction = (width, height, player, allPlayers, food) => {
 			},
 		},
 	]
-	const options = directions.filter(
-		({ direction }) =>
-			!isObstacle(headPosition.x + direction.x, headPosition.y + direction.y),
-	)
+	const options = directions
+		.filter(
+			({ direction }) =>
+				!isObstacle(headPosition.x + direction.x, headPosition.y + direction.y),
+		)
+		.map((option) => ({
+			...option,
+			foodDistance: (() => {
+				let positionToCheck = headPosition
+				while (true) {
+					positionToCheck = {
+						x: positionToCheck.x + option.direction.x,
+						y: positionToCheck.y + option.direction.y,
+					}
+					if (isObstacle(positionToCheck.x, positionToCheck.y)) {
+						return Number.POSITIVE_INFINITY
+					}
+					if (
+						food.some(
+							({ position: { x, y } }) =>
+								x === positionToCheck.x && y === positionToCheck.y,
+						)
+					) {
+						return (
+							Math.abs(positionToCheck.x - headPosition.x) +
+							Math.abs(positionToCheck.y - headPosition.y)
+						)
+					}
+				}
+			})(),
+		}))
 	if (options.length > 0) {
-		actionName = options[Math.floor(Math.random() * options.length)].actionName
+		let closestFoodDistance = Number.POSITIVE_INFINITY
+		options.forEach(({ foodDistance }) => {
+			if (foodDistance < closestFoodDistance) {
+				closestFoodDistance = foodDistance
+			}
+		})
+		const optionsWithClosestFood = options.filter(
+			({ foodDistance }) => foodDistance === closestFoodDistance,
+		)
+		actionName =
+			optionsWithClosestFood[
+				Math.floor(Math.random() * optionsWithClosestFood.length)
+			].actionName
 	}
 
 	return actionName

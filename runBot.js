@@ -18,18 +18,14 @@ export const runBot = async (roomId, playerToken, onEnd) => {
 			room: { width, height, players, food, status },
 			yourPlayerId,
 		} = await response.json()
-
-		if (status === 'ended') {
+		const player = players.find(
+			(otherPlayer) => otherPlayer.id === yourPlayerId,
+		)
+		if (status === 'ended' || !player.isAlive) {
 			onEnd()
 			return
 		}
-		const nextAction = evaluateNextMove(
-			width,
-			height,
-			players,
-			food,
-			yourPlayerId,
-		)
+		const nextAction = evaluateNextMove(width, height, player, players, food)
 
 		// @TODO: remove delay
 		await new Promise((resolve) => setTimeout(resolve, 300))

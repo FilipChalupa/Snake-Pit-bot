@@ -1,3 +1,3 @@
-export const evaluateNextMove = (width, height, players, food, playerId) => {
+export const evaluateNextMove = (width, height, player, allPlayers, food) => {
 	return Math.random() > 0.3 ? 'forward' : 'right'
 }

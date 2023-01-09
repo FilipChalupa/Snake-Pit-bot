@@ -27,8 +27,6 @@ export const runBot = async (roomId, playerToken, onEnd) => {
 		}
 		const nextAction = evaluateNextAction(width, height, player, players, food)
 
-		// @TODO: remove delay
-		await new Promise((resolve) => setTimeout(resolve, 1))
 		setTimeout(() => {
 			loop(nextAction)
 		}, 1)

@@ -1,0 +1,24 @@
+{
+	"name": "snake-pit-bot",
+	"version": "1.0.0",
+	"private": true,
+	"description": "Bot controlling a snake in Snake-Pit to challenge other bots.",
+	"scripts": {
+		"start": "serve",
+		"dev": "npm start"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/FilipChalupa/Snake-Pit-bot.git"
+	},
+	"keywords": [],
+	"author": "",
+	"license": "ISC",
+	"bugs": {
+		"url": "https://github.com/FilipChalupa/Snake-Pit-bot/issues"
+	},
+	"homepage": "https://github.com/FilipChalupa/Snake-Pit-bot#readme",
+	"devDependencies": {
+		"serve": "^14.1.2"
+	}
+}

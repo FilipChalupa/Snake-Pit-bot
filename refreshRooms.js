@@ -9,13 +9,39 @@ const escape = (htmlString) =>
 		.replace(/"/g, '&quot;')
 		.replace(/'/g, '&#39;')
 
-const roomsList = document.querySelector('#rooms')
+const roomsWrapper = document.querySelector('#rooms')
+const roomsList = roomsWrapper.querySelector('ul')
+const autoJoinCountInput = document.querySelector(
+	'#autoJoinForm input[name="count"]',
+)
+
+const handleAutoJoin = async (playerId, playerToken, rooms) => {
+	let joinedRoomsCount = getJoinedRoomIds().length
+	const roomsToJoinCount = Number(autoJoinCountInput.value)
+	if (joinedRoomsCount >= roomsToJoinCount) {
+		return
+	}
+	const waitingRoomWithoutPlayer = rooms.find(
+		(room) =>
+			room.status === 'waiting' &&
+			room.joinedPlayers.every((player) => player.id !== playerId),
+	)
+	if (waitingRoomWithoutPlayer) {
+		setTimeout(async () => {
+			await joinRoom(waitingRoomWithoutPlayer.id, playerToken)
+			await refreshRooms(playerToken)
+		}, 5)
+	}
+}
 
 const update = async (playerId, playerToken) => {
 	const listRoomsResponse = await fetch(`${snakePitServerUrl}/list-rooms`)
 	const data = await listRoomsResponse.json()
 	const rooms = data.rooms.sort((a, b) => a.id.localeCompare(b.id))
 
+	handleAutoJoin(playerId, playerToken, data.rooms)
+
+	roomsWrapper.removeAttribute('hidden')
 	roomsList.innerHTML = ''
 	rooms.forEach((room) => {
 		const roomElement = document.createElement('li')

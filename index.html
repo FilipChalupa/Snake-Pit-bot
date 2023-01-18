@@ -55,6 +55,18 @@
 			</div>
 			<div id="newRoomLink"></div>
 		</form>
-		<ul id="rooms"></ul>
+		<form id="autoJoinForm" hidden>
+			<h3>Autojoin</h3>
+			<div>
+				<label>
+					Number of rooms to be at the same time:
+					<input type="number" name="count" min="0" max="5" value="0" />
+				</label>
+			</div>
+		</form>
+		<div id="rooms" hidden>
+			<h2>Rooms</h2>
+			<ul></ul>
+		</div>
 	</body>
 </html>

@@ -42,7 +42,12 @@ const showCreateForm = (playerToken) => {
 	})
 }
 
+const showAutoJoinForm = () => {
+	document.querySelector('#autoJoinForm').removeAttribute('hidden')
+}
+
 export const showRooms = (playerToken) => {
 	showCreateForm(playerToken)
+	showAutoJoinForm()
 	refreshRooms(playerToken)
 }

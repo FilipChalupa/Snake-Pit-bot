@@ -32,14 +32,14 @@ export const evaluateNextAction = (width, height, player, allPlayers, food) => {
 			direction: forwardDirection,
 		},
 		{
-			actionName: 'left',
+			actionName: 'turnLeft',
 			direction: {
 				x: forwardDirection.y,
 				y: -forwardDirection.x,
 			},
 		},
 		{
-			actionName: 'right',
+			actionName: 'turnRight',
 			direction: {
 				x: -forwardDirection.y,
 				y: forwardDirection.x,

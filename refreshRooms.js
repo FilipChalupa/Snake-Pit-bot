@@ -97,6 +97,15 @@ const update = async (playerId, playerToken) => {
 	})
 }
 
+const showFollowLink = (playerId) => {
+	const wrapper = document.querySelector('#followLink')
+	wrapper.removeAttribute('hidden')
+	const link = wrapper.querySelector('a')
+	const url = `${snakePitServerUrl}/player/?id=${playerId}`
+	link.href = url
+	link.textContent = url
+}
+
 export const refreshRooms = (() => {
 	let timer
 	let playerId = null
@@ -116,6 +125,8 @@ export const refreshRooms = (() => {
 			})
 			const { player } = await response.json()
 			playerId = player.id
+
+			showFollowLink(player.id)
 
 			document.querySelector(
 				'#botName',
